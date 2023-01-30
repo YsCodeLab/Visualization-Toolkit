@@ -33,7 +33,6 @@ def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ra
     lumi.SetTextFont(42)
     lumi.SetNDC(1)
 
-    print("ratio: ", ratio) 
     if ratio: 
         print("making ratio plot")
         c_compare=RatioCanvas("%s_%s vs %s"%(branch_name, compare[0], compare[1]))
@@ -94,3 +93,65 @@ def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ra
 
         os.system("mkdir -p %s"%(saveDir)) # saveDir defined in beginning of function 
         c_compare.canvas.SaveAs(saveFile) # saveFile defined in beginning of function 
+
+
+def draw_summary(hist_list, hist_names, branch_name, drawLog=True, doFill=False, name_tag="", saveRoot=False, saveDir=os.getcwd()):
+    #--- Create Lumi Tag
+    lumi=ROOT.TLatex()
+    lumi.SetTextSize(0.05)
+    lumi.SetTextFont(42)
+    lumi.SetNDC(1)
+
+	#--- Create Legend
+    legend=ROOT.TLegend(0.75,0.60,0.95,0.90)
+    legend.SetTextSize(0.04)
+    legend.SetFillStyle(0)
+    legend.SetBorderSize(0)
+    #make_dir(dist_list[0].output_dir, trigger)
+    if saveRoot:
+		f1= ROOT.TFile("summary_%s.root"%trigger, "recreate")
+    c_total=ROOT.TCanvas()
+    c_total.cd()
+    if drawLog:
+		c_total.SetLogy()
+    maximum=0
+    for i_hist, hist in enumerate(hist_list):
+		hist.SetLineWidth(3)
+
+		hist.SetLineColor(nice_colors[i_hist])
+		if (doFill):
+			hist.SetFillColorAlpha(nice_colors[i_hist], 0.4)
+		else:
+			hist.SetFillColor(0)
+
+		hist.SetLabelOffset(0.01)
+		hist.SetLabelSize(0.03)
+
+		hist.SetTitle("%s"%(branch_name))
+		hist.Sumw2()
+		if (hist.GetMaximum()>maximum):
+			if (drawLog):
+				hist_list[0].SetMaximum(hist.GetMaximum()*5)
+			else:
+				hist_list[0].SetMaximum(hist.GetMaximum()*1.5)
+			maximum=hist.GetMaximum()
+
+    for i_hist, hist in enumerate(hist_list):
+		if i_hist==0:
+			hist.Draw("hist")
+		else:
+			hist.Draw("hist same")
+
+		if saveRoot:
+			hist.Write()
+
+		lumi.DrawLatex(0.18,0.85,"#bf{#it{ATLAS}} Internal");
+		lumi.DrawLatex(0.18,0.79,"#sqrt{s}=13 TeV, 36 fb^{-1}")
+		legend.AddEntry(hist,hist_names[i_hist],"f")
+		legend.Draw("same")
+
+		os.system("mkdir -p %s"%(saveDir))
+		c_total.SaveAs("./%s/summary_%s_%s.pdf"%(saveDir, name_tag, branch_name))
+
+    if saveRoot:
+		f1.Write()

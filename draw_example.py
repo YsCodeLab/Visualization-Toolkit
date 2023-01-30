@@ -2,7 +2,7 @@
 
 import os
 import ROOT
-from lib.draw_scripts import draw_two_histograms
+from lib.draw_scripts import draw_two_histograms, draw_summary
 
 # --0a. Loading variable name in branch/binning desired and unit for each variable here 
 from config.branch_names_binning import binning_dict
@@ -59,25 +59,50 @@ compare=["SigMC-CR",
 saveDir=saveDir%(compare[0], compare[1])
 os.system("mkdir -p %s"%saveDir)
 
-#---5. Draw from all branches
+##---5. Draw from all branches
+#for branch_name in branch_names:
+#    #----Defining output plot and directory names
+#
+#    # draw two comparison 
+#    hist=ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
+#    hist2=ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
+#    hist2.SetLineColor(ROOT.kRed)
+#
+#    tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
+#
+#    if two_files:
+#        tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
+#    else: 
+#        tree.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])    
+#
+##---Draw 2 plot here 
+#    try: 
+#	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
+#    except Exception as e:
+#	print(e)
+#	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
+#
+#---6. Draw Multiple  (Different mass points)
 for branch_name in branch_names:
-    #----Defining output plot and directory names
 
-    # draw two comparison 
-    hist=ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
-    hist2=ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
-    hist2.SetLineColor(ROOT.kRed)
+    hist_list=[]
+    hist_list.append(ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
+    hist_list.append(ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
+
+# add all histogramsk
 
     tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
+    tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
+    #try: 
+    print("compare: ", compare)
+    draw_summary(hist_list, compare, branch_name, saveDir=saveDir)
+    #except Exception as e:
+	#print(e)
+	#print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
 
-    if two_files:
-        tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
-    else: 
-        tree.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])    
 
-#---Draw 2 plot here 
-    try: 
-	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
-    except Exception as e:
-	print(e)
-	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
+
+#TODO
+# Compare two histogram into a Canvas object 
+# Compare three histogram
+# Compare a list of histogram
