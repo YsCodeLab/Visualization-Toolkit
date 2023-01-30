@@ -59,30 +59,7 @@ compare=["SigMC-CR",
 saveDir=saveDir%(compare[0], compare[1])
 os.system("mkdir -p %s"%saveDir)
 
-##---5. Draw from all branches
-#for branch_name in branch_names:
-#    #----Defining output plot and directory names
-#
-#    # draw two comparison 
-#    hist=ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
-#    hist2=ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
-#    hist2.SetLineColor(ROOT.kRed)
-#
-#    tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
-#
-#    if two_files:
-#        tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
-#    else: 
-#        tree.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])    
-#
-##---Draw 2 plot here 
-#    try: 
-#	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
-#    except Exception as e:
-#	print(e)
-#	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
-#
-#---6. Draw Multiple  (Different mass points)
+#---5. Draw Multiple  (Different mass points/different cuts etc, you name it)
 for branch_name in branch_names:
 
     hist_list=[]
@@ -101,8 +78,25 @@ for branch_name in branch_names:
 	#print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
 
 
+#---6. Draw from all branches
+for branch_name in branch_names:
+    #----Defining output plot and directory names
 
-#TODO
-# Compare two histogram into a Canvas object 
-# Compare three histogram
-# Compare a list of histogram
+    # draw two comparison 
+    hist=ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
+    hist2=ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2])
+    hist2.SetLineColor(ROOT.kRed)
+
+    tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
+
+    if two_files:
+        tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
+    else: 
+        tree.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])    
+
+#---Draw 2 plot here 
+    try: 
+	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
+    except Exception as e:
+	print(e)
+	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
