@@ -78,7 +78,7 @@ for branch_name in branch_names:
 	#print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
 
 
-#---6. Draw from all branches
+#---6. Draw compare two histograms with ratio plots
 for branch_name in branch_names:
     #----Defining output plot and directory names
 
@@ -94,7 +94,7 @@ for branch_name in branch_names:
     else: 
         tree.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])    
 
-#---Draw 2 plot here 
+#---Draw 2 plot with ratio here
     try: 
 	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
     except Exception as e:
