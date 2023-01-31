@@ -22,7 +22,7 @@ print(branch_names)
 tree=ROOT.TChain("trees_SRDV_")
 tree2=ROOT.TChain("trees_SRDV_")
 
-#---Processing input trees
+#--3. Processing input trees
 for i_f_name, f_name in enumerate(bkg_filelist): 
     print("f_name: ", f_name)
     tree.Add(f_name)
@@ -55,28 +55,8 @@ two_files=True
 compare=["SigMC-CR",
  	 "BkgMC-CR"]
 
-
 saveDir=saveDir%(compare[0], compare[1])
 os.system("mkdir -p %s"%saveDir)
-
-#---5. Draw Multiple  (Different mass points/different cuts etc, you name it)
-for branch_name in branch_names:
-
-    hist_list=[]
-    hist_list.append(ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
-    hist_list.append(ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
-
-# add all histogramsk
-
-    tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
-    tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
-    #try: 
-    print("compare: ", compare)
-    draw_summary(hist_list, compare, branch_name, saveDir=saveDir)
-    #except Exception as e:
-	#print(e)
-	#print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
-
 
 #---6. Draw compare two histograms with ratio plots
 for branch_name in branch_names:
