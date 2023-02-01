@@ -18,29 +18,10 @@ branch_names=binning_dict.keys()
 print(len(branch_names))
 print(branch_names)
 
-#--2. Selecting the dataset tree
-tree=ROOT.TChain("trees_SRDV_")
-tree2=ROOT.TChain("trees_SRDV_")
 
-#---Processing input trees
-for i_f_name, f_name in enumerate(bkg_filelist): 
-    print("f_name: ", f_name)
-    tree.Add(f_name)
-
-for i_f_name, f_name in enumerate(signal_filelist): 
-    print("f_name: ", f_name)
-    tree2.Add(f_name)
-
-#--3. Add in the cut/legend name
-branch_name="pt"
-compare_dict={#"nocut": "1",
-              #"pass_HLT_6j45":"pass_HLT_6j45",
-              # "SigMC-CR": "DRAW_pass_triggerFlags&&DRAW_pass_DVJETS&&DV_passMaterialVeto&&DV_passFiducialCut&&DV_passChiSqCut&&DV_passDistCut&&DV_z<400 && DV_m<10", 
-              # "BkgMC-CR": "DRAW_pass_triggerFlags&&DRAW_pass_DVJETS&&DV_passMaterialVeto&&DV_passFiducialCut&&DV_passChiSqCut&&DV_passDistCut&&DV_z<400 &&DV_m<10", 
-	       #"CutFlow-step1"
-  	       # "CutFlow-step2"
-		"Mass0.4-Prompt-Cut1": "", # histogram name
-		"Mass0.4-CTau=-Cut1": ""
+#--2. Add in the cut/histogram name in root file
+compare_dict={"Mass0.4-Prompt-Cut1": "hist1", # histogram name
+	      "Mass0.4-CTau=X-Cut1": "hist2"
 }
 
 #--Setting outputdir for the plots
@@ -50,22 +31,21 @@ saveDir="plots/compare_testsamples_%s_%s/"
 drawLog=True
 
 #---4. What would you like to draw on your plot
-compare=["SigMC-CR",
- 	 "BkgMC-CR"]
-
+compare=["Mass0.4-Prompt-Cut1",
+ 	 "Mass0.4-CTau=X-Cut1"]
 
 saveDir=saveDir%(compare[0], compare[1])
 os.system("mkdir -p %s"%saveDir)
 
 #---5. Draw Multiple  (Different mass points/different cuts etc, you name it)
-
-f1.ROOT.TFile.Open()
+f1.ROOT.TFile.Open("FILENAME")
 
 hist_list=[]
 for name, hist_name in compare_dict:
     if name in compare:
 	    hist_list.append(f1.Get(hist_name))
 
-
-# Add the efficiency to the compare_dict.keys for te legend 
-draw_summary(hist_list, compare_dict.keys(), branchname , saveDir=saveDir, drawLog=drawLog)
+try:
+	draw_summary(hist_list, compare_dict.keys(), branchname , saveDir=saveDir, drawLog=drawLog)
+except Exception as e:
+	print(e)
