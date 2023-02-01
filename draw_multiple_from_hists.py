@@ -14,6 +14,7 @@ from config.bkg_file_list import dec_bkg_file_list as bkg_filelist
 
 #---1. Set all the variable names you are interested in running in the histogram
 var_name="pt"
+tag=""
 
 #--2. Add in the cut/histogram name in root file
 compare_dict={"Mass0.4-Prompt-Cut1": "hist1", # histogram name
@@ -21,7 +22,7 @@ compare_dict={"Mass0.4-Prompt-Cut1": "hist1", # histogram name
 }
 
 #--Setting outputdir for the plots
-saveDir="plots/compare_testsamples_%s_%s/"
+saveDir="plots/%s_summary/"%(tag)
 
 #--Drawing controls
 drawLog=True
@@ -37,11 +38,12 @@ os.system("mkdir -p %s"%saveDir)
 f1.ROOT.TFile.Open("FILENAME")
 
 hist_list=[]
+name_list=[]
 for name, hist_name in compare_dict:
     if name in compare:
 	    hist_list.append(f1.Get(hist_name))
 
 try:
-    draw_summary(hist_list, compare_dict.keys(), var_name , saveDir=saveDir, drawLog=drawLog)
+    draw_summary(hist_list, name_list, var_name , saveDir=saveDir, drawLog=drawLog)
 except Exception as e:
     print(e)
