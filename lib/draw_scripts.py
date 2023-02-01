@@ -8,7 +8,10 @@ ROOT.gStyle.SetOptStat(0)
 
 from lib.draw_utilities import createRatio
 
-def draw_2d_histogram(hist, name, xname, yname, ratio=False, drawLog=True, doNormalize=False, SaveDir=os.getcwd()):
+#TODO draw_2d_histogram(hist, name, xname, yname, ratio=False, drawLog=True, doNormalize=False, SaveDir=os.getcwd(), option="LEGO"):
+#TODO def draw_sensitivity()
+#TODO def draw_stacked()
+#TODO def draw_graph()
 
 
 def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ratio=True, drawLog=True, doNormalize=False, saveDir=os.getcwd()):

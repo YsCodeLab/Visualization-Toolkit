@@ -16,26 +16,22 @@ from config.bkg_file_list import dec_bkg_file_list as bkg_filelist
 var_name="pt"
 tag=""
 
-#--2. Add in the cut/histogram name in root file
-compare_dict={"Mass0.4-Prompt-Cut1": "hist1", # histogram name
+#--2. Open rootfile here 
+f1.ROOT.TFile.Open("FILENAME")
+
+#--2. Add in the legend of the histogram(key) and the hisogram name from the rootfile
+compare_dict={"Mass0.4-Prompt-Cut1": "hist1",
 	      "Mass0.4-CTau=X-Cut1": "hist2"
 }
 
-#--Setting outputdir for the plots
+#--3. Setting outputdir for the plots
 saveDir="plots/%s_summary/"%(tag)
 os.system("mkdir -p %s"%saveDir)
 
 #--Drawing controls
 drawLog=True
 
-#---4. What would you like to draw on your plot
-compare=["Mass0.4-Prompt-Cut1",
- 	 "Mass0.4-CTau=X-Cut1"]
-
-
 #---5. Draw Multiple  (Different mass points/different cuts etc, you name it)
-f1.ROOT.TFile.Open("FILENAME")
-
 hist_list=[]
 name_list=[]
 for name, hist_name in compare_dict:
