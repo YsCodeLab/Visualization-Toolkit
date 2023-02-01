@@ -23,6 +23,7 @@ compare_dict={"Mass0.4-Prompt-Cut1": "hist1", # histogram name
 
 #--Setting outputdir for the plots
 saveDir="plots/%s_summary/"%(tag)
+os.system("mkdir -p %s"%saveDir)
 
 #--Drawing controls
 drawLog=True
@@ -31,8 +32,6 @@ drawLog=True
 compare=["Mass0.4-Prompt-Cut1",
  	 "Mass0.4-CTau=X-Cut1"]
 
-saveDir=saveDir%(compare[0], compare[1])
-os.system("mkdir -p %s"%saveDir)
 
 #---5. Draw Multiple  (Different mass points/different cuts etc, you name it)
 f1.ROOT.TFile.Open("FILENAME")

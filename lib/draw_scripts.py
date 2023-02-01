@@ -8,6 +8,9 @@ ROOT.gStyle.SetOptStat(0)
 
 from lib.draw_utilities import createRatio
 
+def draw_2d_histogram(hist, name, xname, yname, ratio=False, drawLog=True, doNormalize=False, SaveDir=os.getcwd()):
+
+
 def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ratio=True, drawLog=True, doNormalize=False, saveDir=os.getcwd()):
 
     saveFile=saveDir+"/%s_%svs%s.pdf"%(branch_name, compare[0], compare[1])
