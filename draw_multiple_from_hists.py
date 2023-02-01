@@ -4,14 +4,6 @@ import os
 import ROOT
 from lib.draw_scripts import draw_two_histograms, draw_summary
 
-# --0a. Loading variable name in branch/binning desired and unit for each variable here 
-from config.branch_names_binning import binning_dict
-from util.units import unit_dict as unit
-
-# --0b. Loading data set 1 and set 2 
-from config.signal_file_list import signal_list as signal_filelist
-from config.bkg_file_list import dec_bkg_file_list as bkg_filelist 
-
 #---1. Set all the variable names you are interested in running in the histogram
 var_name="pt"
 tag=""
