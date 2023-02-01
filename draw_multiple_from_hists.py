@@ -46,13 +46,8 @@ compare_dict={#"nocut": "1",
 #--Setting outputdir for the plots
 saveDir="plots/compare_testsamples_%s_%s/"
 
-#-- Drawing compare 2 histogram plots
 #--Drawing controls
-ratio=True
 drawLog=True
-doNormalize=False
-# if two files, compare 2 different trees, if not compare just different cuts in the first tree
-two_files=True
 
 #---4. What would you like to draw on your plot
 compare=["SigMC-CR",
@@ -73,4 +68,4 @@ for name, hist_name in compare_dict:
 
 
 # Add the efficiency to the compare_dict.keys for te legend 
-draw_summary(hist_list, compare_dict.keys(), branchname , saveDir=saveDir)
+draw_summary(hist_list, compare_dict.keys(), branchname , saveDir=saveDir, drawLog=drawLog)

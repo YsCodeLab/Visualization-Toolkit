@@ -15,8 +15,6 @@ from config.bkg_file_list import dec_bkg_file_list as bkg_filelist
 #---1. Set all the variable names you are interested in running in the histogram
 #--Branch name can be tree branch or calculation from tree branch E.G.  pT[0]**2+pT[1]**2
 branch_names=binning_dict.keys()
-print(len(branch_names))
-print(branch_names)
 
 #--2. Selecting the dataset tree
 tree=ROOT.TChain("trees_SRDV_")
@@ -76,7 +74,7 @@ for branch_name in branch_names:
 
 #---Draw 2 plot with ratio here
     try: 
-	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir)
+	draw_two_histograms(hist, hist2, branch_name, compare, saveDir=saveDir, ratio=ratio, drawLog=drawLog, doNormalize=doNormalize)
     except Exception as e:
 	print(e)
 	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)

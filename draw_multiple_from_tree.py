@@ -15,7 +15,6 @@ from config.bkg_file_list import dec_bkg_file_list as bkg_filelist
 #---1. Set all the variable names you are interested in running in the histogram
 #--Branch name can be tree branch or calculation from tree branch E.G.  pT[0]**2+pT[1]**2
 branch_names=binning_dict.keys()
-print(len(branch_names))
 print(branch_names)
 
 #--2. Selecting the dataset tree
@@ -43,7 +42,6 @@ compare_dict={"nocut": "1",
 #--Setting outputdir for the plots
 saveDir="plots/compare_testsamples_%s_%s/"
 
-#-- Drawing compare 2 histogram plots
 #--Drawing controls
 ratio=True
 drawLog=True
@@ -66,13 +64,11 @@ for branch_name in branch_names:
     hist_list.append(ROOT.TH1D("hist", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
     hist_list.append(ROOT.TH1D("hist2", "hist", binning_dict[branch_name][0], binning_dict[branch_name][1], binning_dict[branch_name][2]))
 
-# add all histogramsk
-
+# add all histograms
     tree.Draw("%s>>%s"%(branch_name, "hist"), compare_dict[compare[0]])
     tree2.Draw("%s>>%s"%(branch_name, "hist2"), compare_dict[compare[1]])
-    #try: 
-    print("compare: ", compare)
-    draw_summary(hist_list, compare, branch_name, saveDir=saveDir)
-    #except Exception as e:
-	#print(e)
-	#print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
+    try: 
+    	draw_summary(hist_list, compare, branch_name, saveDir=saveDir, ratio=ratio, drawLog=drawLog, doNormalize=doNormalize)
+    except Exception as e:
+	print(e)
+	print("drawing two historgram for tree with branch name: %s failed. "%branch_name)
