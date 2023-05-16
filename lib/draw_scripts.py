@@ -8,10 +8,63 @@ ROOT.gStyle.SetOptStat(0)
 
 from lib.draw_utilities import createRatio
 
+#TODO Add axis tool
 #TODO draw_2d_histogram(hist, name, xname, yname, ratio=False, drawLog=True, doNormalize=False, SaveDir=os.getcwd(), option="LEGO"):
 #TODO def draw_sensitivity()
 #TODO def draw_stacked()
 #TODO def draw_graph()
+
+def draw_single(hist, branch_name, label="", unit="", drawLog=True, doNormalize=False, saveDir=os.getcwd()):
+
+    saveFile=saveDir+"/%s_%s.pdf"%(branch_name, label)
+
+    if drawLog:
+        saveFile=saveFile[:-4]+"_log.pdf"
+
+    if doNormalize:
+        try:
+            hist.Scale(1/hist.Integral())
+            hist.SetMaximum(hist.GetMaximum()*1.5)
+        except ZeroDivisionError:
+            print("histogram has no events")
+        except Exception as e:
+            print(e)
+
+    lumi=ROOT.TLatex()
+    lumi.SetTextSize(0.05)
+    lumi.SetTextFont(42)
+    lumi.SetNDC(1)
+    hist.SetTitle("%s; %s"%(branch_name, unit))
+    hist.SetFillColorAlpha(ROOT.kRed+1, 0.4)
+    hist.SetLineColor(ROOT.kBlack)
+    hist.SetLineWidth(3)
+
+    legend=ROOT.TLegend(0.25,0.50,0.90,0.70)
+    legend.SetTextSize(0.04)
+    legend.SetFillStyle(0)
+    legend.SetBorderSize(0)
+    legend.AddEntry(hist, label,"f")
+
+    c1=ROOT.TCanvas()
+    c1.cd()
+
+    if drawLog:
+        c1.SetLogy()
+        hist.SetMaximum(hist.GetMaximum()*100)
+    else:
+        hist.SetMaximum(hist.GetMaximum()*1.2)
+
+	hist.GetXaxis().SetLabelOffset(0.1)
+
+    hist.Draw("hist")
+    legend.Draw("same")
+
+    lumi.DrawLatex(0.18,0.85,"#bf{#it{ATLAS}} Internal");
+    lumi.DrawLatex(0.18,0.79,"#sqrt{s}=13 TeV, MC ~139 fb-1")
+
+    os.system("mkdir -p %s"%(saveDir)) # saveDir defined in beginning of function 
+
+    c1.SaveAs(saveFile) # saveFile defined in beginning of function 
 
 
 def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ratio=True, drawLog=True, doNormalize=False, saveDir=os.getcwd()):
@@ -76,7 +129,7 @@ def draw_two_histograms(hist, hist2, branch_name, compare=["hist1", "hist2"], ra
         print("histogram integral: ", hist.Integral())
         legend.Draw("same")
 
-        lumi.DrawLatex(0.18,0.85,"#bf{#it{ATLAS}} Internal Simulation");
+        lumi.DrawLatex(0.18,0.85,"#bf{#it{ATLAS}} Internal");
         lumi.DrawLatex(0.18,0.79,"#sqrt{s}=13 TeV, MC ~139 fb-1")
 
         try:
