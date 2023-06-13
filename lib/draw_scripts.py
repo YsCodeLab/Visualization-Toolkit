@@ -14,9 +14,9 @@ from lib.draw_utilities import createRatio
 #TODO def draw_stacked()
 #TODO def draw_graph()
 
-def draw_single(hist, branch_name, label="", unit="", drawLog=True, doNormalize=False, saveDir=os.getcwd()):
+def draw_single(hist, branch_name, name="", label="", unit="", drawLog=True, doNormalize=False, saveDir=os.getcwd()):
 
-    saveFile=saveDir+"/%s_%s.pdf"%(branch_name, label)
+    saveFile=saveDir+"/%s%s_%s.pdf"%(name,branch_name, label)
 
     if drawLog:
         saveFile=saveFile[:-4]+"_log.pdf"

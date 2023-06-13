@@ -1,4 +1,4 @@
-#Example to draw from tree branches
+#Example to draw from histograms in root files
 
 import os
 import ROOT
